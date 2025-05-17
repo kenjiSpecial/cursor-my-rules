@@ -73,3 +73,20 @@
 ## 参照URL
 
 - [Taskmaster](https://github.com/eyaltoledano/claude-task-master/tree/main)
+
+## シェルスクリプトのコピー方法
+
+`.rules/rules/` 配下のシェルスクリプト（*.sh）を任意のディレクトリにまとめてコピーしたい場合は、プロジェクトルートの `copy-rules.sh` を利用してください。
+
+### 使い方
+
+```sh
+./copy-rules.sh コピー先ディレクトリ
+```
+
+例:
+```sh
+./copy-rules.sh xxx/yyy
+```
+
+これで `.rules/rules/` 内の全ての `.sh` ファイルが指定ディレクトリにコピーされます。

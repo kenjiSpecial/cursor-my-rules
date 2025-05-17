@@ -1,0 +1,220 @@
+---
+description: Guide for using Task Master to manage task-driven development workflows
+globs: **/*
+alwaysApply: true
+---
+はい、承知いたしました。以下に翻訳した文章を記載します。
+
+---
+
+# Task Master Development Workflow
+
+このガイドでは、Task Master を使用して software development project を管理するための典型的なプロセスを概説します。
+
+## 主なインタラクション: MCP Server vs. CLI
+
+Task Master は、主に2つのインタラクション方法を提供します。
+
+1.  **MCP Server (統合ツールに推奨)**:
+    -   AI agent や統合開発環境 (Cursor など) の場合、**MCP server を介したインタラクションが推奨される方法です**。
+    -   MCP server は、一連のツール (例: `get_tasks`, `add_subtask`) を通じて Task Master の機能を提供します。
+    -   この方法は、CLI parsing と比較して、より優れた performance、構造化されたデータ交換、そして豊富な error handling を提供します。
+    -   MCP architecture と利用可能なツールの詳細については、@`mcp.mdc` を参照してください。
+    -   MCP ツールとその対応する CLI command の包括的なリストと説明は、@`taskmaster.mdc` にあります。
+    -   `scripts/modulック、または MCP ツール/ダイレクト関数定義が変更された場合は、**MCP server を再起動してください**。
+
+2.  **`task-master` CLI (User およびフォールバック用)**:
+    -   グローバルな `task-master` command は、直接的な terminal 操作のためのinterface を提供します。
+    -   MCP server にアクセスできない場合や、特定の機能が MCP を介して公開されていない場合のフォールバックとしても機能します。
+    -   `npm install -g task-master-ai` でグローバルにインストールするか、`npx task-master-ai ...` でローカルに使用します。
+    -   CLI command は、多くの場合 MCP ツールを反映しています (例: `task-master list` は `get_tasks` に対応します)。
+    -   詳細な command reference については、@`taskmaster.mdc` を参照してください。
+
+## 標準的な Development Workflow プロセス
+
+-   新しい project は、`initialize_project` ツール / `task-master init` または `parse_prd` / `task-master parse-prd --input='<prd-file.txt>'` (詳細は @`taskmaster.mdc`) を実行して、初期の `tasks.json` を生成することから始めます。
+-   コーディングセッションは `get_tasks` / `task-master lister.mdc`) で開始し、現在の task、status、および ID を確認します。
+-   次に作業する task は `next_task` / `task-master next` (詳細は @`taskmaster.mdc`) を使用して決定します。
+-   Task をブレークダウンする前に、`analyze_project_complexity` / `task-master analyze-complexity --research`r.mdc`) で task の複雑度を分析します。
+-   複雑度レポートは `complexity_report` / `task-master complexity-report` (詳細は @`t使用して確認します。
+-   Dependencies (すべて 'done' とマークされているもの)、priority level、および ID 順に基づいて task を選択します。
+-   `tasks/` ディレクトリ内の task f入力を求めて task を明確化します。
+-   特定の task の詳細を表示するには `get_task` / `task-master show <id>` (詳細は @`taskmaster.mdc`) を使用し、実装要件をsk は、`--force` (既存の subtask を置き換えるため) や `--research` などの適切なフラグを付けて `expand_task` / `task-master expand --id=<id> --force --taskmaster.mdc`) を使用してブレークダウンします。
+-   再生成する前に、必要に応じて `clear_subtasks` / `task-master clear-subtasks --id=<id>` (詳細は @`taskmaster.mdc`) を使用して既存の subtask をクリアします。
+-   Task の詳細、dependencies、および project の標準に従って code を実装します。
+-   完了とマークする前に、test strategy に従って tasests.mdc`)。
+-   完了した task は `set_task_status` / `task-master set-status --id=<id> --status=done` (詳細は @`taskmaster.mdc`) でマークします。
+-   実装が元の計画と異なる場合は、`aster update --from=<id> --prompt="..."` または `update_task` / `task-master update-task --id=<id> --prompt="..."` (詳細は @`taskmaster.mdc`) を使用して依存 task を更新します。
+-   実装中に発見された新しい task は `add_task` / `tsk --prompt="..." --research` (詳細は @`taskmaster.mdc`) を使用して追加します。
+-   必要に応じて `add_subtask` / `task-master add-subtask --parent=<id> --title="..."` (詳細は @`taskmaster.mdc`) を使用して新しいします。
+-   `update_subtask` / `task-master update-subtask --id=<subtaskId> --prompt='Add implementation noteetails...'` (詳細は @`taskmaster.mdc`) を使用して、subtask にメモや詳細を追加します。
+-   `tasks.json` を更新した後、`generate` / `task-master generate` (詳細は @`taskmaster.mdc`) で task file を生成します。
+-   必要に応じて、`add_dependency`/`remove_dependency` er add-dependency`/`remove-dependency` command、`validate_dependencies` / `task-master validate-dependencies`、および `fix_dependenter fix-dependencies` (詳細は @`taskmaster.mdc`) を使用して、有効な dependency 構造を維持します。
+-   作業を選択する際は、dependency chain と task -   `get_tasks` / `task-master list` を使用して定期的に進捗を報告します。
+
+## Task の複雑度分析 (Task Complexity Analysis)
+
+-   包括的な分析のために `analyze_project_complexity` / `task-master analyze-complexity --taskmaster.mdc`) を実行します。
+-   フォーマットされた読みやすいバージョンとして、`complexity_report` /plexity-report` (詳細は @`taskmaster.mdc`) 経由で複雑度レポートを確認します。
+-   詳細なブレークダウンのために、最も複雑度スコアが高い (8-10) task に焦点を当てます。
+-   分析結果を使用して、適切な subtask の割り当てを決定します。
+-   レポートは `expand_task` ツール/command によって自動的に使用されることに注意してください。
+
+## Task のブレークダウンプロセス (Task Breakdown Process)
+
+-   `expand_task` / `task-master expand --雑度レポートが見つかれば自動的に使用し、見つからない場合はデフォルト数の subtask を生成します。
+-   明示的な subtask 数を指定するには `--num=<number>` を使用し、デフォルトまたは複雑度レポートの推奨を上書きします。
+-   Perplexity AI を活用した research-backed な展開のために `--research` フラグを追加します。
+-   新しい subtask を生成する前に既存の subtask をクリアするには `--force` フラグを追加します (デフォルトはの context を提供するために `--prompt="<context>"` を使用します。
+-   生成された subtask を必要に応じてレビューし、調整します。
+-   一度に複数の保留中の task を展開するには、`expaask-master expand --all` を使用し、`--force` や `--research` などのフラグを尊重します。
+-   Subtask が (`expand` の `--force` フラグに関わらず)完全に置き換えられる必要がある場合は、最初に `clear_subtasks` / `task-master clear-subtasks --id=<id>` でクリアします。
+
+## 実装の乖離への対応 (Implementation Drift Handling)
+
+-   実装が計画されたアプローチと大幅に異なる場合
+-   現在の実装の選択により、将来の task を変更する必要がある場合
+-   新しい dependencies や要件が発生した場合
+-   複数の将来の task を更新するには `update` / `task-master update --from=<futureTaskId> --prompt='<explanation>\nUpdate context...' --research` を使用します。
+-   単一の特定の task を更新するには `update_task` / `task-master update-task --id=<taskId> --prompt='<explanation>\nUpdate context...' --research` を使用します。
+
+## Task Status 管理
+
+-   作業準備ができた task には 'pending' を使用します。
+-   完了し検証された task には 'done' を使用します。
+-   延期された task には 'deferred' を使用します。
+-   Project 固有の workflow のために、必要に応じてカスタム status 値を追加します。
+
+## Task 構造フィールド
+
+-   **id**: Task の一意の識別子 (例: `1`, `1.1`)
+-   **title**: 短く説明的なタイトル (例: `"Initialize Repo"`)
+-   **description**: Task が何を含むかの簡潔な要約 (例: `"Create a new repository, set up initial structure."`)
+-   **status**: Task の現在の状態 (例: `"pending"`, `"done"`, `"deferred"`)
+-   **dependencies**: 前提条件となる task の ID (例: `[1, 2.1]`)
+    -   Dependencies は status indicator (✅: 完了, ⏱️: 保留中) と共に表示されます
+    -   これにより、どの前提条件 task が作業をブロックしているかを迅速に特定できます
+-   **priority**: 重要度レベル (例: `"high"`, `"medium"`, `"low"`)
+-   **details**: 詳細な実装指示 (例: `"Use GitHub client ID/secret, handle callback, set session token."`)
+-   **testStrategy**: 検証アプローチ (例: `"Deploy and call endpoint to confirm 'Hello World' response."`)
+-   **subtasks**: より小さく、より具体的な task のリスト (例: `[{"id": 1, "title": "Configure OAuth", ...}]`)
+-   Task 構造の詳細については (以前 @`tasks.mdc` にリンクされていました)、参照してください。
+
+## Configuration 管理 (更新版)
+
+Taskmaster の configuration は、主に2つのメカニズムを通じて管理されます。
+
+1.  **`.taskmasterconfig` ファイル (プライマリ):**
+    *   Project root ディレクトリに配置されます。
+    *   ほとんどの configuration 設定を保存します: AI モデル選択 (メイン, research, フォールバック), パラメータ (max tokens, temperature), logging level, デフォルトの subtasks/priority, project 名など。
+    *   **`task-master models --setup` command で管理します。** 内容を理解している場合を除き、手動で編集しないでください。
+    *   **特定のモデルの表示/設定は `task-master models` command または `models` MCP ツールで行います。**
+    *   初めて `task-master models --setup` を実行したときに自動的に作成されます。
+
+2.  **Environment Variables (`.env` / `mcp.json`):**
+    *   機密性の高い API キーと特定の endpoint URL **のみ**に使用されます。
+    *   CLI で使用する場合、API キー (プロバイダーごとに1つ) を project root の `.env` ファイルに配置します。
+    *   MCP/Cursor 統合の場合、これらのキーを `.cursor/mcp.json` の `env` セクションで設定します。
+    *   利用可能なキー/変数: `assets/env.example` またはコマンドリファレンスの Configuration セクション (以前 @`taskmaster.mdc` にリンクされていました) を参照してください。
+
+**重要:** API キー以外の設定 (モデル選択、`MAX_TOKENS`、`LOG_LEVEL` など) は、**もはや environment variables では設定されません**。`task-master models` command (またはインタラクティブな設定のための `--setup`) か、`models` MCP ツールを使用してください。
+**MCP で AI command が失敗する場合**は、選択された provider の API キーが `.cursor/mcp.json` の `env` セクションに存在することを確認してください。
+**CLI で AI command が失敗する場合**は、選択された provider の API キーが project root の `.env` ファイルに存在することを確認してください。
+
+## 次の Task の決定
+
+-   次に作業する task を表示するには `next_task` / `task-master next` を実行します。
+-   この command は、すべての dependencies が満たされた task を識別します。
+-   Task は priority level、dependency 数、および ID によって優先順位が付けられます。
+-   この command は以下を含む包括的な task 情報を表示します:
+    -   基本的な task の詳細と description
+    -   実装の詳細
+    -   Subtasks (存在する場合)
+    -   文脈に応じた推奨アクション
+-   新しい development 作業を開始する前に推奨されます。
+-   Project の dependency 構造を尊重します。
+-   Task が適切な順序で完了することを保証します。
+-   一般的な task アクションのためのすぐに使える command を提供します。
+
+## 特定の Task 詳細の表示
+
+-   特定の task を表示するには `get_task` / `task-master show <id>` を実行します。
+-   Subtask にはドット表記を使用します: `task-master show 1.2` (task 1 の subtask 2 を表示)
+-   `next` command と同様の包括的な情報を表示しますが、特定の task に対するものです。
+-   親 task の場合、すべての subtask とその現在の status を表示します。
+-   Subtask の場合、親 task の情報と関係を表示します。
+-   特定の task に適した文脈に応じた推奨アクションを提供します。
+-   実装前に task の詳細を調査したり、status を確認したりするのに役立ちます。
+
+## Task Dependencies の管理
+
+-   Dependency を追加するには `add_dependency` / `task-master add-dependency --id=<id> --depends-on=<id>` を使用します。
+-   Dependency を削除するには `remove_dependency` / `task-master remove-dependency --id=<id> --depends-on=<id>` を使用します。
+-   System は循環 dependencies や重複した dependency エントリを防ぎます。
+-   Dependencies は追加または削除される前に存在がチェックされます。
+-   Task file は dependency の変更後に自動的に再生成されます。
+-   Dependencies は task リストやファイル内で status indicator と共に視覚化されます。
+
+## 反復的な Subtask 実装 (Iterative Subtask Implementation)
+
+Task が `expand_task` または同様のメソッドを使用して subtask にブレークダウンされたら、実装のためにこの反復プロセスに従います。
+
+1.  **目標の理解 (準備):**
+    *   `get_task` / `task-master show <subtaskId>` (詳細は @`taskmaster.mdc`) を使用して、subtask の特定の目標と要件を完全に理解します。
+
+2.  **初期探索 & 計画 (イテレーション 1):**
+    *   これは、具体的な実装計画を作成する最初の試みです。
+    *   Codebase を探索して、変更が必要となる正確なファイル、関数、さらには特定のコード行を特定します。
+    *   意図するコード変更 (diffs) とその場所を決定します。
+    *   この探索フェーズから*すべての*関連詳細を収集します。
+
+3.  **計画のログ記録:**
+    *   `update_subtask` / `task-master update-subtask --id=<subtaskId> --prompt='<詳細な計画>'` を実行します。
+    *   Prompt には、探索フェーズからの*完全かつ詳細な*調査結果を提供してください。ファイルパス、行番号、提案された diff、論拠、特定された潜在的な課題を含めます。詳細を省略しないでください。目標は、subtask の `details` 内に豊富なタイムスタンプ付きのログを作成することです。
+
+4.  **計画の検証:**
+    *   `get_task` / `task-master show <subtaskId>` を再度実行して、詳細な実装計画が subtask の詳細に正常に追加されたことを確認します。
+
+5.  **実装の開始:**
+    *   `set_task_status` / `task-master set-status --id=<subtaskId> --status=in-progress` を使用して subtask の status を設定します。
+    *   ログに記録された計画に基づいてコーディングを開始します。
+
+6.  **改善と進捗のログ記録 (イテレーション 2+):**
+    *   実装が進むにつれて、課題に直面したり、ニュアンスを発見したり、成功したアプローチを確認したりします。
+    *   **新しい情報を追加する前に**: subtask に記録されている*既存の*詳細を (`get_task` を使用するか、context から思い出して) 簡単に確認し、更新が新鮮な洞察を加え、冗長性を避けるようにします。
+    *   **定期的に** `update_subtask` / `task-master update-subtask --id=<subtaskId> --prompt='<更新の詳細>\n- うまくいったこと...\n- うまくいかなかったこと...'` を使用して、新しい発見を追加します。
+    *   **重要なログ内容:**
+        *   何が機能したか (発見された「基本的な真実」)。
+        *   何が機能せず、その理由は何か (同じ過ちを繰り返さないため)。
+        *   成功した特定のコードスニペットや設定。
+        *   下された決定、特に user input で確認された場合。
+        *   初期計画からの逸脱とその理由。
+    *   目的は、subtask の詳細を継続的に充実させ、AI (および人間の developer) が学習し、適応し、エラーの繰り返しを避けるのに役立つ実装過程のログを作成することです。
+
+7.  **レビュー & ルールの更新 (実装後):**
+    *   Subtask の実装が機能的に完了したら、すべてのコード変更と関連するチャット履歴を確認します。
+    *   実装中に確立された新しい、または変更されたコードパターン、規約、またはベストプラクティスを特定します。
+    *   内部ガイドライン (以前 @`cursor_rules.mdc` と @`self_improve.mdc` にリンクされていました) に従って、新しいルールを作成するか既存のルールを更新します。
+
+8.  **Task の完了マーク:**
+    *   実装を検証し、必要なルールを更新した後、subtask を完了としてマークします: `set_task_status` / `task-master set-status --id=<subtaskId> --status=done`。
+
+9.  **変更の Commit (Git を使用している場合):**
+    *   関連するコード変更と更新/新規ルールファイル (`git add .`) をステージングします。
+    *   Subtask で行われた作業を要約した包括的な Git commit message を作成します。これにはコード実装とルール調整の両方を含めます。
+    *   Terminal で直接 commit command を実行します (例: `git commit -m 'feat(module): Implement feature X for subtask <subtaskId>\n\n- Details about changes...\n- Updated rule Y for pattern Z'`)。
+    * ガイドライン (以前 @`changeset.mdc` にリンクされていました) に従って Changeset が必要かどうかを検討します。必要な場合は、`npm run changeset` を実行し、生成されたファイルをステージングし、commit を修正するか新しい commit を作成します。
+
+10. **次の Subtask へ進む:**
+    *   次の subtask を特定します (例: `next_task` / `task-master next` を使用)。
+
+## Code 分析 & Refactoring 手法
+
+-   **トップレベル関数検索 (Top-Level Function Search)**:
+    -   Module 構造の理解や refactor の計画に役立ちます。
+    -   エクスポートされた関数/定数を見つけるために grep/ripgrep を使用します:
+        `rg "export (async function|function|const) \w+"` または同様のパターン。
+    -   Migration 中にファイル間で関数を比較したり、潜在的な命名衝突を特定したりするのに役立ちます。
+
+---
+*この workflow は一般的なガイドラインを提供するものです。特定の project のニーズや team の慣行に基づいて調整してください。*

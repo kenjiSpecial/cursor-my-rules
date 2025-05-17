@@ -1,0 +1,52 @@
+---
+description: Guidelines for creating and maintaining Cursor rules to ensure consistency and effectiveness.
+globs: .cursor/rules/*.mdc
+alwaysApply: true
+---
+-   **必須のルール構造 (Required Rule Structure):**
+    ```markdown
+    ---
+    description: ルールが強制する内容の明確な一行説明
+    globs: path/to/files/*.ext, other/path/**/*
+    alwaysApply: boolean
+    ---
+
+    - **太字の主要ポイント (Main Points in Bold)**
+      - 詳細を含むサブポイント
+      - 例と説明
+    ```
+
+-   **ファイル参照 (File References):**
+    -   ファイルを参照するには `@filename` (@filename) を使用します
+    -   例: ルール参照の場合は @prisma.mdc
+    -   例: コード参照の場合は @schema.prisma
+
+-   **コード例 (Code Examples):**
+    -   言語固有のコードブロックを使用します
+    ```typescript
+    // ✅ DO: 良い例を示す
+    const goodExample = true;
+
+    // ❌ DON'T: アンチパターンを示す
+    const badExample = false;
+    ```
+
+-   **ルール内容のガイドライン (Rule Content Guidelines):**
+    -   高レベルの概要から始める
+    -   具体的で実行可能な要件を含める
+    -   正しい実装の例を示す
+    -   可能な場合は既存のコードを参照する
+    -   他のルールを参照してルールを DRY (Don't Repeat Yourself) に保つ
+
+-   **ルールのメンテナンス (Rule Maintenance):**
+    -   新しいパターンが出現したらルールを更新する
+    -   実際の codebase から例を追加する
+    -   古いパターンを削除する
+    -   関連するルールを相互参照する
+
+-   **ベストプラクティス (Best Practices):**
+    -   明確にするために箇条書きを使用する
+    -   Description は簡潔に保つ
+    -   DO と DON'T の両方の例を含める
+    -   理論的な例よりも実際のコードを参照する
+    -   ルール間で一貫したフォーマットを使用する

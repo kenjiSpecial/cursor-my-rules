@@ -1,0 +1,10 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Core
+## 基本的な考え方
+
+- memorybank(02-memorybank.mdc)に従い開発のドキュメントを作成していく
+- taskmaster(taskmaster.mdc)に従いタスクの管理を行っていく

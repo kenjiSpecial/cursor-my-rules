@@ -121,6 +121,12 @@ flowchart TD
 
 注意: **update memory bank** によってトリガーされた場合、一部更新が不要なファイルであっても、Memory Bank の**全ての**ファイルを**必ず**レビューしなければなりません。特に、現在の状態を追跡する `activeContext.md` と `progress.md` に重点を置きます。
 
+## タスク完了時のMemory Bank更新ルール
+
+- Taskmaster等でタスクのステータスを「done（完了）」にした際は、必ずそのタスクで得られた知見・注意点・決定事項などをMemory Bank（該当するmdファイル）に追記してください。
+- これにより、プロジェクトの知識や意思決定の履歴が確実に蓄積され、次回以降の作業効率や品質向上に役立ちます。
+- 追記後は、必要に応じてgitでコミットし、履歴を残してください。
+
 ## Project Intelligence (.cursor/rules)
 
 `.cursor/rules` ファイルは、各プロジェクトにおける私の学習記録 (learning journal) です。私がより効果的に作業するのに役立つ、重要なパターン、設定 (preferences)、プロジェクトインテリジェンスを記録します。あなたやプロジェクトと共に作業する中で、コードだけからは明らかでない重要な知見 (key insights) を発見し、文書化します。
@@ -163,14 +169,14 @@ flowchart TD
 
 ## Memory Bank の初期化
 
-Memory Bank を新規プロジェクトに導入する際は、次の手順で “空の枠組み” を準備します。
+Memory Bank を新規プロジェクトに導入する際は、次の手順で "空の枠組み" を準備します。
 **初期化が完了するまでは *Plan Mode* に入らない** というルールを徹底してください。
 
 1. **リポジトリ構造の作成**
    ```bash
    mkdir -p memory-bank
    touch memory-bank/{projectbrief.md,productContext.md,systemPatterns.md,techContext.md,activeContext.md,progress.md}
-````
+```
 
 > ※ Git で管理する場合はここで初回コミットを推奨。
 
@@ -185,21 +191,4 @@ Memory Bank を新規プロジェクトに導入する際は、次の手順で �
        lastUpdated: YYYY-MM-DD
      -->
      ```
-   * 章立ては “## Heading” 以上を使い、他の見出しは **`###`** から下位に配置。
-
-3. **最低限のメタ情報を埋める**
-
-   | File              | 必須フィールド     | 雛形例                                      |
-   | ----------------- | ----------- | ---------------------------------------- |
-   | projectbrief.md   | `目的 / スコープ` | - アプリが解決する課題<br>- ステークホルダ<br>- 主要 KPI    |
-   | productContext.md | `ユーザーペルソナ`  | - Primary persona<br>- Secondary persona |
-   | ...               | ...         | ...                                      |
-
-
-4. **初回レビューチェックリスト**
-
-   * [ ] 6つのコアファイルがすべて存在する
-   * [ ] 各ファイルのヘッダーに `created:` が設定されている
-   * [ ] `.cursor/rules` が空で用意されている
-
-
+   * 章立ては "## Heading" 以上を使い、他の見出しは **`

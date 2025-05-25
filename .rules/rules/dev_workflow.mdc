@@ -3,10 +3,6 @@ description: Guide for using Task Master to manage task-driven development workf
 globs: **/*
 alwaysApply: true
 ---
-はい、承知いたしました。以下に翻訳した文章を記載します。
-
----
-
 # Task Master Development Workflow
 
 このガイドでは、Task Master を使用して software development project を管理するための典型的なプロセスを概説します。

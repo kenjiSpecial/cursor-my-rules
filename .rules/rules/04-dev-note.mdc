@@ -1,0 +1,30 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# DEV NOTE
+
+- ユーザーが本日のノートと言ったら基本的に scripts/note/{yymmdd}.md のことを言う。
+
+## メモ
+
+- メモは取っていく。メモを取ると言われたら、scripts/note/{yymmdd}.mdにメモを残す。メモがない場合は、scripts/note/{yymmdd}.mdに記録する
+
+## ルーティン
+
+- task終了となったら、scripts/note/{yymmdd}.mdに作業ログを残す
+    - 作業ログを残すときは、関連ファイルを必ず追記する
+
+GOOD
+```
+### 9-3. フォームURL・割引表示更新 実施内容
+- 50%OFF招待LP（/lp/invitation-50）で「優待チケットを使う」ボタン押下時、50%専用フォームURL（REFERRAL_50_TRIAL_STAY_URL）が利用されるよう修正。
+- `AccommodationLineUpSection.tsx` で `discountRate` が50のとき `REFERRAL_50_TRIAL_STAY_URL` を使うロジックを追加。
+- これにより、30%/50%の切り替え時に正しいフォームURLが反映されることを確認。
+- 関連ファイル: `notahotel-lp-web/src/containers/lp/Referral/components/AccommodationLineUpSection.tsx`, `notahotel-lp-web/src/utils/linkUrl.ts`
+
+#### invitation50で編集したファイル（相対パス一覧）
+- notahotel-lp-web/src/containers/lp/Referral/components/AccommodationLineUpSection.tsx
+- notahotel-lp-web/src/utils/linkUrl.ts 
+```

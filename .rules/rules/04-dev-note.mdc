@@ -5,15 +5,21 @@ alwaysApply: true
 ---
 # DEV NOTE
 
-- ユーザーが本日のノートと言ったら基本的に scripts/note/{yymmdd}.md のことを言う。
+- ユーザーが本日のノートと言ったら基本的に nothotel-lp-web-scripts/note/{yymmdd}.md のことを言う。日付は`date +%y%m%d`というコマンドをターミナルで実行し、**必ず**取得した日付を使用する。
+- 開発コードはnothotel-lp-webフォルダーにあるファイルで行う
+- nothotel-lp-web-scripts/request-note/{yymmdd}-dev.mdに、リクエストをメモしていく
+- pnpmでパッケージ管理やプロジェクト開発の運用を行う
+- css modulesで実装する。 tailwindで実装しない。
+- tsxのファイル名は
 
 ## メモ
 
-- メモは取っていく。メモを取ると言われたら、scripts/note/{yymmdd}.mdにメモを残す。メモがない場合は、scripts/note/{yymmdd}.mdに記録する
+- 開発タスクを行うと必ずメモは取る。メモを取ると言われたら、scripts/note/{yymmdd}.mdにメモを残す。メモがない場合は、nothotel-lp-web-scripts/note/{yymmdd}.mdに記録する
+- メモを取るかどうかを**常に**聞くようにしましょう!
 
 ## ルーティン
 
-- task終了となったら、scripts/note/{yymmdd}.mdに作業ログを残す
+- task終了となったら、nothotel-lp-web-scripts/note/{yymmdd}.mdに作業ログを残す
     - 作業ログを残すときは、関連ファイルを必ず追記する
 
 GOOD

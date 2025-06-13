@@ -1,0 +1,12 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# note keeper
+
+メモを取るためのmcpサーバーである
+
+メモ or note で始まった場合はそれ以降の文字を note keeperへメモを投稿する
+
+

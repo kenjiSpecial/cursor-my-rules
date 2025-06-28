@@ -176,13 +176,9 @@ Commit は、あなたの library の consumer に意図を伝えるために、
 # プロジェクト個別のルール
 
 ## 概要
-- **Cloudflare Workers** 上で動作する軽量メモ API。実装は **TypeScript + Hono**。データはワーカー内の組み込み DB **PGlite** に保存し、**Drizzle ORM** で操作します。リクエスト／レスポンスの検証は **Zod**。GitHub へのプッシュをトリガに **wrangler‑action** で自動ビルド & デプロイ。
 
 ## アーキテクチャ
-- Hono + typescript + cloudFlare + zod + drizzle-orm + PGlite
-
-## ローカル開発フロー
-
+## ローカル開発フロー(例)
 1. **依存インストール**  `pnpm i`
 2. **型生成**             `pnpm drizzle:generate`
 3. **開発サーバ**         `pnpm dev` → `wrangler dev --local --persist`
